@@ -14,10 +14,17 @@ SELECTED_WALL=$(for a in $(ls -t *.jpg *.png *.gif *.jpeg 2>/dev/null); do echo 
 [ -z "$SELECTED_WALL" ] && exit 1
 SELECTED_PATH="$WALLPAPER_DIR/$SELECTED_WALL"
 
-# === SET WALLPAPER ===
+# === SET WALLPAPER WITH SWWW (GROW FROM CURSOR) ===
+swww img "$SELECTED_PATH" \
+    --transition-type grow \
+    --transition-pos "$(hyprctl cursorpos)" \
+    --transition-duration 1.2 \
+    --transition-fps 144 \
+    --transition-bezier 0.16,1,0.3,1
+
+# === EXTRACT COLORS WITH MATUGEN ===
 matugen image "$SELECTED_PATH"
 
 # === CREATE SYMLINK ===
 mkdir -p "$(dirname "$SYMLINK_PATH")"
 ln -sf "$SELECTED_PATH" "$SYMLINK_PATH"
-
